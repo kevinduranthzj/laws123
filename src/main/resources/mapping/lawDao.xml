@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjian.laws.dao.LawDao">
+    <select id="selectOneContentByKeyWord" resultType="String">
+       select item
+          from
+            zhifa_baodian_one
+          where module=#{oneid} and islast='1'
+    </select>
+    <select id="selectTwoContentByKeyWord" resultType="String">
+       select item
+          from
+            zhifa_baodian_two two
+          where two.oneid like '%${oneid}%' and two.islast='1'
+    </select>
+    <select id="selectThreeContentByKeyWord" resultType="String">
+       select item
+          from
+            zhifa_baodian_three
+          where
+            zhifa_baodian_three.threeid like '%${threeid}%' and zhifa_baodian_three.islast='1'
+    </select>
+    <select id="selectFourContentByKeyWord" resultType="String">
+       select item
+          from
+            zhifa_baodian_four
+          where
+            zhifa_baodian_four.fourid like '%${fourid}%' and zhifa_baodian_four.islast='1'
+    </select>
+    <select id="findItemByModule" resultType="LawItem">
+        select item,isLast
+          from
+            zhifa_baodian_one
+          where module=#{module}
+          order by id
+    </select>
+    <select id="findItemByTwoId" resultType="LawItem">
+        select item,isLast
+          from
+            zhifa_baodian_two
+          where oneid in (select oneid from zhifa_baodian_one where item=#{item})
+          order by id
+          limit #{start},#{pageNum}
+    </select>
+    <select id="findTotalNum" resultType="int">
+        select count(item)
+        from
+             zhifa_baodian_two
+        where oneid in (select oneid from zhifa_baodian_one where item=#{item})
+    </select>
+    <select id="findItemByThreeId" resultType="LawItem">
+        select item,isLast
+          from
+            zhifa_baodian_three
+          where twoid in (select twoid from zhifa_baodian_two where item=#{item})
+          order by item
+    </select>
+    <select id="findItemByFourId" resultType="LawItem">
+        select item,isLast
+          from
+            zhifa_baodian_four
+          where threeid in (select threeid from zhifa_baodian_three where item=#{item})
+          order by item
+    </select>
+</mapper>

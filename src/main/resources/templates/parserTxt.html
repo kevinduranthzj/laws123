@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=3.0, width=device-width">
+    <title>文本展示</title>
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/example.css">
+    <script src="../js/mySearch.js"></script>
+    <script src="../js/jquery-2.1.4.js"></script>
+</head>
+<body>
+<div class="page">
+    <div class="weui-tab" style="height: 100%">
+        <div class="weui-tab__panel">
+            <article class="weui-article" id="article">
+
+            </article>
+        </div>
+        <div class="weui-tabbar">
+            <a href="../acceptPolice/index" class="weui-tabbar__item">
+                <img src="../images/首页1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">首页</p>
+            </a>
+            <a href="../acceptPolice/home?module=1&moduleName=事前执法检查" id="1" class="weui-tabbar__item">
+                <img src="../images/执法1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">事前执法</p>
+            </a>
+            <a href="../acceptPolice/home?module=2&moduleName=行政案件办理" id="2" class="weui-tabbar__item">
+                <img src="../images/案件1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">案件办理</p>
+            </a>
+            <a href="../acceptPolice/home?module=4&moduleName=证据规格指引" id="4" class="weui-tabbar__item">
+                <img src="../images/证据1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">证据规格</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    var module = getParam("module");
+    if(module != '5'){
+        document.getElementById(module).className += " weui-bar__item_on";
+        var src = document.getElementById(module).firstElementChild.src;
+        document.getElementById(module).firstElementChild.src = src.slice(0,-5) + ".png";
+    }
+    var txtName = getParam("txtName")+".html";
+    var url = "../txt/"+txtName;
+    $("#article").load(url);
+</script>
+</body>
+</html>

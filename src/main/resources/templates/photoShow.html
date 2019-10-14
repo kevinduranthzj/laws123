@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=3.0, initial-scale=1.0"/>
+    <title id="title"></title>
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/example.css">
+    <script src="../js/mySearch.js"></script>
+</head >
+<body>
+<div class="page">
+    <div class="weui-tab" style="height: 100%">
+        <div class="weui-tab__panel">
+            <img id="img" style="width: 100%;vertical-align: middle;">
+            <img id="img1" style="width: 100%;vertical-align: middle;display: none">
+            <img id="img2" style="width: 100%;vertical-align: middle;display: none">
+        </div>
+        <div class="weui-tabbar">
+            <a href="../acceptPolice/index" class="weui-tabbar__item">
+                <img src="../images/首页1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">首页</p>
+            </a>
+            <a href="../acceptPolice/home?module=1&moduleName=事前执法检查" id="1" class="weui-tabbar__item">
+                <img src="../images/执法1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">事前执法</p>
+            </a>
+            <a href="../acceptPolice/home?module=2&moduleName=行政案件办理" id="2" class="weui-tabbar__item">
+                <img src="../images/案件1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">案件办理</p>
+            </a>
+            <a href="../acceptPolice/home?module=4&moduleName=证据规格指引" id="4" class="weui-tabbar__item">
+                <img src="../images/证据1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">证据规格</p>
+            </a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var module = getParam("module");
+    var photoName = getParam("photoName");
+    document.getElementById("title").innerText = photoName;
+    var path = "../images/模板/"+photoName + ".jpg";
+    console.log(validateImage(path));
+    if(validateImage(path)){
+        document.getElementById("img").style.height = '100%';
+        document.getElementById("img").src = path;
+    }else {
+        document.getElementById("img1").style.display = '';
+        document.getElementById("img").src = "../images/模板/"+photoName + "1.jpg"
+        document.getElementById("img1").src = "../images/模板/"+photoName + "2.jpg"
+        if(validateImage("../images/模板/"+photoName + "3.jpg")){
+            document.getElementById("img2").style.display = '';
+            document.getElementById("img2").src = "../images/模板/"+photoName + "3.jpg"
+        }
+    }
+
+    function validateImage(url)
+    {
+        var xmlHttp ;
+        if (window.ActiveXObject)
+        {
+            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        else if (window.XMLHttpRequest)
+        {
+            xmlHttp = new XMLHttpRequest();
+        }
+        xmlHttp.open("Get",url,false);
+        xmlHttp.send();
+        if(xmlHttp.status==404)
+            return false;
+        else
+            return true;
+    }
+
+</script>
+</body>
+</html>

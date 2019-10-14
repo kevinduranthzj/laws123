@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <title id="mainTitle"></title>
+    <link rel="stylesheet" href="../css/weui.css">
+    <link rel="stylesheet" href="../css/example.css">
+    <script src="../js/mySearch.js"></script>
+    <script src="../js/jquery-2.1.4.js"></script>
+</head>
+<body style="background-color: #EDEDED">
+<div class="page">
+    <div class="weui-tab" style="height: 100%">
+        <div class="weui-tab__panel">
+            <div class="page__hd">
+                <h1 class="page__title" id="title"></h1>
+            </div>
+            <div class="weui-search-bar" id="searchBar">
+                <div class="weui-search-bar__form">
+                    <div class="weui-search-bar__box">
+                        <i class="weui-icon-search"></i>
+                        <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索"  onkeyup="resultShow()"/>
+                        <a href="javascript:" onclick="searchClear()" class="weui-icon-clear" id="searchClear"></a>
+                    </div>
+                </div>
+                <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel"></a>
+            </div>
+            <div class="weui-cells searchbar-result" id="searchResult" style="margin-top:-7px;margin-left:8px;margin-right:8px;display: none">
+            </div>
+            <div class="weui-cells" id="list">
+
+            </div>
+        </div>
+        <div class="weui-tabbar">
+            <a href="../acceptPolice/index" class="weui-tabbar__item">
+                <img src="../images/首页1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">首页</p>
+            </a>
+            <a href="../acceptPolice/home?module=1&moduleName=事前执法检查" id="1" class="weui-tabbar__item">
+                <img src="../images/执法1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">事前执法</p>
+            </a>
+            <a href="../acceptPolice/home?module=2&moduleName=行政案件办理" id="2" class="weui-tabbar__item">
+                <img src="../images/案件1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">案件办理</p>
+            </a>
+            <a href="../acceptPolice/home?module=4&moduleName=证据规格指引" id="4" class="weui-tabbar__item">
+                <img src="../images/证据1.png" alt="" class="weui-tabbar__icon">
+                <p class="weui-tabbar__label">证据规格</p>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    var module = getParam("module");
+    if(module != '3'){
+        document.getElementById(module).className += " weui-bar__item_on";
+        var src = document.getElementById(module).firstElementChild.src;
+        document.getElementById(module).firstElementChild.src = src.slice(0,-5) + ".png";
+    }
+    var item = getParam("item");
+    document.getElementById("mainTitle").innerText = getParam("moduleName");
+    document.getElementById("title").innerText = getParam("moduleName");
+    $(function () {
+        $.ajax({
+            type: "POST",
+            url:  "../law/findItemByFourId",
+            data: {
+                item: item
+            },
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                if(data.msg == "ok"){
+                    var list = data.data;
+                    for(var i=0;i<list.length;i++){
+                        var param = JSON.stringify({param1:list[i].isLast,param2:list[i].item}).replace(/\"/g,"'");
+                        $("#list").append('' +
+                            '<div class="weui-cell weui-cell_access" onclick="changePage('+param+')">\n' +
+                            '                <div class="weui-cell__bd">\n' +
+                            '                    <p>'+list[i].item+'</p>\n' +
+                            '                </div>\n' +
+                            '                <div class="weui-cell__ft">\n' +
+                            '                </div>\n' +
+                            '            </div>')
+                    }
+                }else {
+                    alert("页面错误")
+                }
+            }
+        })
+    });
+    function changePage(param) {
+        if(param.param1 != '1'){
+            location.href = "../acceptPolice/five?item="+param.param2+"&moduleName="+getParam("moduleName")+"&module="+module;
+        }else {
+            var str = "";
+            if(param.param2.substring(0,2).indexOf("、") != -1){
+                var split = param.param2.split("、");
+                str = split[1];
+                if(split.length>2){
+                    for (var i = 2; i < split.length; i++) {
+                        str = str + "、" + split[i];
+                    }
+                }
+            }else {
+                str = param.param2
+            }
+            if(module == "3"){
+                location.href = "../acceptPolice/photo?photoName="+str+"&module="+module;
+            }else {
+                location.href = "../acceptPolice/txt?txtName="+str+"&module="+module;
+            }
+        }
+    }
+</script>
+</body>
+</html>
